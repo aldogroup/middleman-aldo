@@ -39,6 +39,7 @@ module Middleman
 
         # Settings for Heroku
         if  ENV['STAGING'] == 'heroku'
+          require 'rack_staging'
           use Rack::Staging
           app.set :offline, false
           app.set :cache_duration, 45
