@@ -16,6 +16,8 @@ module Middleman
         require 'middleman-autoprefixer'
         require 'susy'
         require 'fastimage'
+        require 'rack'
+        require 'rack_staging'
 
         app.set :base_url, '/'
         app.set :media_host, '/'
@@ -39,8 +41,7 @@ module Middleman
 
         # Settings for Heroku
         if  ENV['STAGING'] == 'heroku'
-          require 'rack_staging'
-          use Rack::Staging
+          app.use Rack::Staging
           app.set :offline, false
           app.set :cache_duration, 45
         end
