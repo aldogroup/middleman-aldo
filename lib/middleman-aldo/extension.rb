@@ -16,6 +16,7 @@ module Middleman
         require 'middleman-autoprefixer'
         require 'susy'
         require 'fastimage'
+        require 'middleman-imageoptim'
         require 'rack'
         require 'rack_staging'
 
