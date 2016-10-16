@@ -209,11 +209,13 @@ module Middleman
 
       require 'curb'
 
-      def get_url(url)
+      def get_url(url, multi_options={})
         # make multiple GET requests
         easy_options = {:follow_location => true}
         # Use Curl::CURLPIPE_MULTIPLEX for HTTP/2 multiplexing
-        multi_options = {:pipeline => Curl::CURLPIPE_HTTP1}
+        unless ENV['STAGING'] == 'heroku'
+          multi_options = {:pipeline => Curl::CURLPIPE_HTTP1}
+        end
 
         begin
           Curl::Multi.get([url], easy_options, multi_options) do |http|
@@ -247,20 +249,6 @@ module Middleman
 
         unless data
           data = get_with_retries(url, 3)
-
-          # data = []
-          #
-          # (0..sheet.num_rows).each do |row|
-          #   data[row] = []
-          #   (0..sheet.num_cols).each do |col|
-          #     data[row][col] = sheet[row+1, col+1]
-          #   end
-          # end
-          #
-          # while data.last.all? {|c| c == "" || c.nil? }
-          #   data.pop
-          # end
-
           store_in_cache(locale, tab, data)
         end
 
