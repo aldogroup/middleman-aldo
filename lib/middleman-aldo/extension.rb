@@ -20,6 +20,10 @@ module Middleman
         require 'rack'
         require 'rack_staging'
 
+        unless File.directory?('data/cache')
+          FileUtils.mkdir 'data/cache'
+        end
+
         app.set :base_url, '/'
         app.set :media_host, '/'
         app.set :cache, true
