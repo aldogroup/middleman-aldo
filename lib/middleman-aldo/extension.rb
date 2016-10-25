@@ -67,7 +67,6 @@ module Middleman
             config.inline   = true
           end
           # Activate some extra gems
-          activate :gdrive
           activate :directory_indexes
         }
 
