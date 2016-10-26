@@ -16,6 +16,13 @@ module Middleman
         require 'middleman-autoprefixer'
         require 'susy'
         require 'fastimage'
+        require 'middleman-imageoptim'
+        require 'rack'
+        require 'rack_staging'
+
+        unless File.directory?('data/cache')
+          FileUtils.mkdir 'data/cache'
+        end
 
         app.set :base_url, '/'
         app.set :media_host, '/'
@@ -39,8 +46,7 @@ module Middleman
 
         # Settings for Heroku
         if  ENV['STAGING'] == 'heroku'
-          require 'rack_staging'
-          use Rack::Staging
+          app.use Rack::Staging
           app.set :offline, false
           app.set :cache_duration, 45
         end
@@ -65,7 +71,6 @@ module Middleman
             config.inline   = true
           end
           # Activate some extra gems
-          activate :gdrive
           activate :directory_indexes
         }
 
