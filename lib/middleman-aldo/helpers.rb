@@ -242,7 +242,7 @@ module Middleman
         season = options[:season] || config[:season]
         campaign = options[:campaign] || config[:campaign]
         cache_period = config[:cache_duration] || 30
-        base_url = "http://pydrive.herokuapp.com/api/v1/"
+        base_url = "http://gdrive-api.herokuapp.com/api/v1/"
         path = options[:path] || "#{banner}/#{season}/#{campaign}/#{locale}/#{tab}"
         url = base_url + path
         data = load_from_cache(locale, tab, "#{cache_period}s")
