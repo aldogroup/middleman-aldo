@@ -214,7 +214,9 @@ module Middleman
         easy_options = {:follow_location => true}
         # Use Curl::CURLPIPE_MULTIPLEX for HTTP/2 multiplexing
         unless ENV['STAGING'] == 'heroku'
-          multi_options = {:pipeline => Curl::CURLPIPE_HTTP1}
+          if ENV['REV'] == 'dev'
+            multi_options = {:pipeline => Curl::CURLPIPE_HTTP1}
+          end
         end
 
         begin
