@@ -200,58 +200,44 @@ module Middleman
       end
 
       def getlink(row, link)
-        if revision.include?('dev')
-          row[hybris_link(link)].rstrip
-        else
-          remove_host(row[hybris_link(link)].rstrip)
-        end
+        row[hybris_link(link)].rstrip
       end
 
-      require 'curb'
+      require 'net/http'
 
       def get_url(url, multi_options={})
-        # make multiple GET requests
-        easy_options = {:follow_location => true}
-        # Use Curl::CURLPIPE_MULTIPLEX for HTTP/2 multiplexing
-        unless ENV['STAGING'] == 'heroku'
-          multi_options = {:pipeline => Curl::CURLPIPE_HTTP1}
-        end
-
-        begin
-          Curl::Multi.get([url], easy_options, multi_options) do |http|
-            return http
-          end
-        rescue Curl::Err::TimeoutError
-          nil
-        end
+        uri = URI(url)
+        response = Net::HTTP.get uri
+        response
       end
 
       # Returns the response on success, nil on TimeoutErrors after all retry_count attempts.
-      def get_with_retries(url, retry_count)
+      def get_with_retries(url, retry_count=3)
         retry_count.times do
           result = get_url(url)
-          return JSON.parse(result.body_str) if result
+          return JSON.parse(result) if result
         end
         nil
       end
 
       def get_data(locale, *args)
+        # require 'pry'
+        # binding.pry
         options = args.extract_options!
         tab = options[:tab] || nil
-        banner = options[:banner] || config[:banner]
-        season = options[:season] || config[:season]
-        campaign = options[:campaign] || config[:campaign]
-        cache_period = config[:cache_duration] || 30
+        banner = options[:banner] || extensions[:aldo].options[:banner]
+        season = options[:season] || extensions[:aldo].options[:season]
+        campaign = options[:campaign] || extensions[:aldo].options[:campaign]
+        cache_period = config[:cache_duration] || 15
         base_url = "http://gdrive-api.herokuapp.com/api/v1/"
         path = options[:path] || "#{banner}/#{season}/#{campaign}/#{locale}/#{tab}"
         url = base_url + path
         data = load_from_cache(locale, tab, "#{cache_period}s")
 
         unless data
-          data = get_with_retries(url, 3)
+          data = get_with_retries(url, 5)
           store_in_cache(locale, tab, data)
         end
-
         return data
       end
 
@@ -304,45 +290,54 @@ module Middleman
       end
 
       def getItemByPosition(grid_position, page_data_request)
+        return nil unless page_data_request
         item_by_position = page_data_request.find { |k| k['grid_position'] == grid_position }
         item_by_position ? item_by_position : '<span>no item found!</span>'
       end
 
       def getItemByPositionAndType(grid_position, page_type, page_data_request)
+        return nil unless page_data_request
         item_by_position = page_data_request.find {|k| k['grid_position'] == grid_position && k['type'] == page_type }
         item_by_position ? item_by_position : '<span>no item found!</span>'
       end
 
       def getItemByType(type, page_data_request)
+        return nil unless page_data_request
         item_by_position = page_data_request.find { |k| k['type'] == type}
         item_by_position ? item_by_position : '<span>no item found!</span>'
       end
 
       def getItemByPage(page, page_data_request)
+        return nil unless page_data_request
         item_by_position = page_data_request.find { |k| k['page'] == page}
         item_by_position ? item_by_position : '<span>no item found!</span>'
       end
 
       def getAllItemsByPosition(grid_position, page_data_request)
+        return nil unless page_data_request
         item_by_position = page_data_request.find_all {|k| k['grid_position'] == grid_position }
         item_by_position ? item_by_position : '<span>no item found!</span>'
       end
 
       def getAllItemsByType(type, page_data_request)
+        return nil unless page_data_request
         item_by_position = page_data_request.find_all {|k| k['type'] == type }
         item_by_position ? item_by_position : '<span>no item found!</span>'
       end
 
       def getAllItemsByPage(page, page_data_request)
+        return nil unless page_data_request
         item_by_position = page_data_request.find_all { |k| k['page'] == page }
         item_by_position ? item_by_position : '<span>no item found!</span>'
       end
 
       def getCell(grid_position, column_name, page_data_request)
+        return nil unless page_data_request
         getItemByPosition(grid_position, page_data_request)[column_name]
       end
 
       def getData(data_type, data_name, page_data)
+        return nil unless page_data
         request = page_data.find_all {|k| k["#{data_type}"].match /#{data_name}/}
         if request.length == 1
           return request[0]
