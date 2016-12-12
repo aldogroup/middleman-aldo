@@ -4,18 +4,21 @@ require 'middleman-aldo/helpers'
 module Middleman
   module Aldo
     class Middleman::AldoExtension < ::Middleman::Extension
-      option :banner, 'Brand folder name'
-      option :season, 'Season folder name'
-      option :campaign, 'Spreadsheet name'
-      option :l3_datafile, 'Path to the L3 Folder'
+      # option :config, 'config for the extension'
+      # option :banner, 'Brand folder name'
+      # option :season, 'Season folder name'
+      # option :campaign, 'Spreadsheet name'
+      # option :l3_datafile, 'Path to the L3 Folder'
 
       # self.defined_helpers = [::Middleman::Aldo::Helpers]
 
       helpers Middleman::Aldo::Helpers
       include Middleman::Aldo::Helpers
-      expose_to_application :get_data
 
-      def initialize(app, options = {}, &block)
+      expose_to_application :get_data, :sanitize_clean
+      expose_to_config :get_data, :sanitize_clean
+
+      def initialize(app, options_hash={}, &block)
 
         super
 
@@ -34,14 +37,15 @@ module Middleman
           FileUtils.mkdir 'data/cache'
         end
 
-        app.set :base_url, '/'
-        app.set :media_host, '/'
-        app.set :cache, true
+        app.config[:base_url] = '/'
+        app.config[:media_host] = '/'
+        app.config[:cache] = true
 
-        @banner = options[:banner]
-        @season = options[:season]
-        @campaign = options[:campaign]
-        @l3_datafile = options[:l3_datafile]
+        # @banner = options[:config][:banner]
+        # @season = options[:config][:season]
+        # @campaign = options[:config][:campaign]
+        # @generate_l3 = options[:config][:l3][:enable]
+        # @l3_datafile = options[:config][:l3][:path]
 
         # Default environment variables
         app.config[:version] =  ENV['VER'] || 'hybris'
@@ -103,43 +107,7 @@ module Middleman
         ###########################
 
         # Generate Dynamic Level3 Pages
-        if app.config[:generate_l3] == true
-          app.ready do
-            logger.warn "== Generating L3 Pages"
-            # require 'pry'
-            # binding.pry
-            Dir.foreach('locales') do |proxy_lang|
-              next if proxy_lang == '.' or proxy_lang == '..'
-              localeID = "#{proxy_lang}".split('.')[0]
-              # require 'pry'
-              # binding.pry
-              l3_data = get_data(localeID, path: "#{@extensions[:aldo].options.banner}/#{@extensions[:aldo].options.l3_datafile}/#{localeID}/l3", tab: "l3")
 
-              l3_data.each do |i|
-                begin
-                  unless i['page'].empty? || i['hybris ID'].to_i.to_s.empty?
-                    image = i['image']
-                    copy = i['copy']
-                    title = i['page']
-                    raw_type = i['type']
-                    type = sanitize_clean(raw_type)
-                    raw_category = i['category']
-                    hybris_id = i['hybris ID']
-                    disclaimer = i['disclaimer']
-                    category = sanitize_clean(raw_category)
-                    filename = category + '-' + sanitize_clean(title)
-                    filepath = "#{localeID}/l3/#{hybris_id}-#{category}.html"
-                    proxy filepath, "/localizable/l3/template_l3.html", locals: { l3_title: title, l3_category: category, l3_type: type, l3_image: image, l3_copy: copy, l3_disclaimer: disclaimer, lang: localeID }
-                  end
-                rescue
-                  # require 'pry'
-                  # binding.pry
-                  nil
-                end
-              end
-            end
-          end
-        end
 
         app.configure :development do
           activate :relative_assets
@@ -152,84 +120,81 @@ module Middleman
         end
       end
 
+      # require 'net/http'
 
+      # def get_url(url, multi_options={})
+      #   uri = URI(url)
+      #   response = Net::HTTP.get uri
+      #   response
+      # end
 
-      require 'net/http'
+      # # Returns the response on success, nil on TimeoutErrors after all retry_count attempts.
+      # def get_with_retries(url, retry_count)
+      #   retry_count.times do
+      #     result = get_url(url)
+      #     return JSON.parse(result) if result
+      #   end
+      #   nil
+      # end
 
-      def get_url(url, multi_options={})
-        uri = URI(url)
-        response = Net::HTTP.get uri
-        response
-      end
+      # def get_data(locale, *args)
+      #   options = args.extract_options!
+      #   tab = options[:tab] || nil
+      #   banner = options[:banner] || app.config[:banner]
+      #   season = options[:season] || app.config[:season]
+      #   campaign = options[:campaign] || app.config[:campaign]
+      #   cache_period = app.config[:cache_duration] || 30
+      #   base_url = "http://gdrive-api.herokuapp.com/api/v1/"
+      #   path = options[:path] || "#{banner}/#{season}/#{campaign}/#{locale}/#{tab}"
+      #   url = base_url + path
+      #   data = load_from_cache(locale, tab, "#{cache_period}s")
 
-      # Returns the response on success, nil on TimeoutErrors after all retry_count attempts.
-      def get_with_retries(url, retry_count)
-        retry_count.times do
-          result = get_url(url)
-          return JSON.parse(result) if result
-        end
-        nil
-      end
+      #   unless data
+      #     data = get_with_retries(url, 3)
+      #     store_in_cache(locale, tab, data)
+      #   end
+      #   return data
+      # end
 
-      def get_data(locale, *args)
-        options = args.extract_options!
-        tab = options[:tab] || nil
-        banner = options[:banner] || app.config[:banner]
-        season = options[:season] || app.config[:season]
-        campaign = options[:campaign] || app.config[:campaign]
-        cache_period = app.config[:cache_duration] || 30
-        base_url = "http://gdrive-api.herokuapp.com/api/v1/"
-        path = options[:path] || "#{banner}/#{season}/#{campaign}/#{locale}/#{tab}"
-        url = base_url + path
-        data = load_from_cache(locale, tab, "#{cache_period}s")
+      # def store_in_cache(locale, tab, data)
+      #   ::File.open("data/cache/#{locale}_#{tab}.yml", "w") do |file|
+      #     file << YAML.dump({
+      #       "ts" => Time.now.to_i,
+      #       "data" => data
+      #     })
+      #   end
+      # end
 
-        unless data
-          data = get_with_retries(url, 3)
-          store_in_cache(locale, tab, data)
-        end
-        puts data
-        return data
-      end
+      # def load_from_cache(locale, tab, cache_period)
+      #   cache_seconds = period_to_seconds(cache_period)
+      #   return nil unless cache_seconds
+      #   return nil unless cache_seconds > 0
 
-      def store_in_cache(locale, tab, data)
-        ::File.open("data/cache/#{locale}_#{tab}.yml", "w") do |file|
-          file << YAML.dump({
-            "ts" => Time.now.to_i,
-            "data" => data
-          })
-        end
-      end
+      #   cache = YAML.load(::File.read("data/cache/#{locale}_#{tab}.yml")) rescue nil
+      #   return nil unless cache
+      #   return nil if Time.at(cache['ts'].to_i) + period_to_seconds(cache_period) < Time.now
 
-      def load_from_cache(locale, tab, cache_period)
-        cache_seconds = period_to_seconds(cache_period)
-        return nil unless cache_seconds
-        return nil unless cache_seconds > 0
+      #   cache['data']
+      # end
 
-        cache = YAML.load(::File.read("data/cache/#{locale}_#{tab}.yml")) rescue nil
-        return nil unless cache
-        return nil if Time.at(cache['ts'].to_i) + period_to_seconds(cache_period) < Time.now
+      # def period_to_seconds(period)
+      #   return nil unless period
 
-        cache['data']
-      end
+      #   _, value, unit = *period.match(/(\d+)\s*(s|second|seconds|m|minute|minutes|h|hour|hours)/)
 
-      def period_to_seconds(period)
-        return nil unless period
+      #   return puts "Bad time period for GDrive cache '#{period}'" unless value && unit
 
-        _, value, unit = *period.match(/(\d+)\s*(s|second|seconds|m|minute|minutes|h|hour|hours)/)
+      #   multiplier = case unit
+      #   when "s", "second", "seconds"
+      #     1
+      #   when "m", "minute", "minutes"
+      #     60
+      #   when "h", "hour", "hours"
+      #     60 * 60
+      #   end
 
-        return puts "Bad time period for GDrive cache '#{period}'" unless value && unit
-
-        multiplier = case unit
-        when "s", "second", "seconds"
-          1
-        when "m", "minute", "minutes"
-          60
-        when "h", "hour", "hours"
-          60 * 60
-        end
-
-        multiplier * value.to_i
-      end
+      #   multiplier * value.to_i
+      # end
 
     end
   end

@@ -200,7 +200,11 @@ module Middleman
       end
 
       def getlink(row, link)
-        row[hybris_link(link)].rstrip
+        if row[hybris_link(link)].nil? || row[hybris_link(link)].empty?
+          row[hybris_link(link)]
+        else
+          row[hybris_link(link)].rstrip
+        end
       end
 
       require 'net/http'
@@ -225,10 +229,10 @@ module Middleman
         # binding.pry
         options = args.extract_options!
         tab = options[:tab] || nil
-        banner = options[:banner] || extensions[:aldo].options[:banner]
-        season = options[:season] || extensions[:aldo].options[:season]
-        campaign = options[:campaign] || extensions[:aldo].options[:campaign]
-        cache_period = config[:cache_duration] || 15
+        banner = options[:banner] || @app.config[:banner]
+        season = options[:season] || @app.config[:season]
+        campaign = options[:campaign] || @app.config[:campaign]
+        cache_period = @app.config[:cache_duration] || 15
         base_url = "http://gdrive-api.herokuapp.com/api/v1/"
         path = options[:path] || "#{banner}/#{season}/#{campaign}/#{locale}/#{tab}"
         url = base_url + path
