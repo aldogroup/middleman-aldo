@@ -35,7 +35,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'oj',             '~> 2.11'
   spec.add_dependency 'builder',        '~> 3.2'
   spec.add_dependency 'redcarpet',      '~> 3.2'
-  spec.add_dependency 'therubyracer',   '~> 0.12'
   spec.add_dependency 'livingstyleguide', '~> 2.0'
   # Server
   spec.add_dependency 'curb',               '~> 0.9'
