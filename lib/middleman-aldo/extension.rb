@@ -12,7 +12,7 @@ module Middleman
         # Grab a reference to self so we can access it deep inside blocks
         _self = self
 
-        require 'livingstyleguide'
+        # require 'livingstyleguide'
         require 'middleman-autoprefixer'
         require 'susy'
         require 'fastimage'
