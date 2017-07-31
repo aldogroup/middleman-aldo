@@ -95,7 +95,7 @@ module Middleman
               next if proxy_lang == '.' or proxy_lang == '..'
               localeID = "#{proxy_lang}".split('.')[0]
 
-              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/#{localeID}", tab: "#{localeID}")
+              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories_test/#{localeID}", tab: "#{localeID}")
 
               l3_data.each do |i|
                 begin
