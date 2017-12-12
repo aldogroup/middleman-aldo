@@ -96,7 +96,7 @@ module Middleman
               localeID = "#{proxy_lang}".split('.')[0]
 
               if localeID == 'us_en_US'
-                newLocaleID = localeID.gsub('us_en_US', 'en-US')
+                newLocaleID = localeID.gsub('us_en_US', 'us-en')
               else
                 newLocaleID = localeID.gsub('_', '-')
               end
@@ -104,7 +104,7 @@ module Middleman
 
               # l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/#{localeID}/l3", tab: "l3")
 
-              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_#{modLocaleID}", tab: "l3")
+              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_#{modLocaleID}", tab: "L3_#{modLocaleID}")
 
               require 'pry'
               binding.pry
