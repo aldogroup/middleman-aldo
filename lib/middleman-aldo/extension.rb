@@ -95,7 +95,7 @@ module Middleman
               next if proxy_lang == '.' or proxy_lang == '..'
               localeID = "#{proxy_lang}".split('.')[0]
               newLocaleID = "#{proxy_lang}".split('.')[0]
-              modLocaleID = newLocaleID.replace(/\_/g, '-')
+              # modLocaleID = newLocaleID.replace(/\_/g, '-')
 
               require 'pry'
               binding.pry
