@@ -95,19 +95,19 @@ module Middleman
               next if proxy_lang == '.' or proxy_lang == '..'
               localeID = "#{proxy_lang}".split('.')[0]
 
-              if (localeID == 'us_en_US') {
+              if localeID == 'us_en_US')
                 newLocaleID = localeID.gsub('us_en_US', 'en-US')
-              } else {
+              else
                 newLocaleID = localeID.gsub('_', '-')
-              }
+              end
               
 
               # l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/#{localeID}/l3", tab: "l3")
 
               l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_#{modLocaleID}", tab: "l3")
 
-              # require 'pry'
-              # binding.pry
+              require 'pry'
+              binding.pry
 
               l3_data.each do |i|
                 # begin
