@@ -97,12 +97,12 @@ module Middleman
               newLocaleID = "#{proxy_lang}".split('.')[0]
               modLocaleID = newLocaleID.gsub('_', '-')
 
-              require 'pry'
-              binding.pry
-
               # l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/#{localeID}/l3", tab: "l3")
 
-              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_ca-en", tab: "l3")
+              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_#{modLocaleID}", tab: "L3_#{modLocaleID}")
+
+              require 'pry'
+              binding.pry
 
               l3_data.each do |i|
                 # begin
