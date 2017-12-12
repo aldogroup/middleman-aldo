@@ -106,7 +106,7 @@ module Middleman
 
               # l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/#{localeID}/l3", tab: "l3")
 
-              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_#{modLocaleID}", tab: "L3_#{modLocaleID}")
+              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_#{newLocaleID}", tab: "L3_#{newLocaleID}")
 
   
 
