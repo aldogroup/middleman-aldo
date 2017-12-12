@@ -101,8 +101,8 @@ module Middleman
 
               l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_#{modLocaleID}", tab: "L3_#{modLocaleID}")
 
-              require 'pry'
-              binding.pry
+              # require 'pry'
+              # binding.pry
 
               l3_data.each do |i|
                 # begin
@@ -125,15 +125,15 @@ module Middleman
                 #   binding.pry
                 # end
                 begin
-                  unless i['page'].empty? || i['hybris ID'].to_i.to_s.empty?
-                    image = i['image']
-                    copy = i['copy']
-                    title = i['page']
-                    raw_type = i['type']
+                  unless i['TITLE'].empty? || i['CATEGORY ID'].to_i.to_s.empty?
+                    image = i['MEDIA']
+                    copy = i['COPY']
+                    title = i['TITLE']
+                    raw_type = i['TYPE']
                     type = sanitize_clean(raw_type)
-                    raw_category = i['category']
-                    hybris_id = i['hybris ID']
-                    disclaimer = i['disclaimer']
+                    raw_category = i['DEPARTMENT']
+                    hybris_id = i['CATEGORY ID']
+                    disclaimer = i['DISCLAIMER']
                     category = sanitize_clean(raw_category)
                     filename = category + '-' + sanitize_clean(title)
                     filepath = "#{localeID}/l3/#{hybris_id}-#{category}.html"
