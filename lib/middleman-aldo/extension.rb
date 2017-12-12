@@ -95,7 +95,7 @@ module Middleman
               next if proxy_lang == '.' or proxy_lang == '..'
               localeID = "#{proxy_lang}".split('.')[0]
 
-              if localeID == 'us_en_US')
+              if localeID == 'us_en_US'
                 newLocaleID = localeID.gsub('us_en_US', 'en-US')
               else
                 newLocaleID = localeID.gsub('_', '-')
