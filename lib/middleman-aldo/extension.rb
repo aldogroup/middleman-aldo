@@ -100,9 +100,6 @@ module Middleman
               else
                 newLocaleID = localeID.gsub('_', '-')
               end
-              
-              require 'pry'
-              binding.pry
 
               # l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/#{localeID}/l3", tab: "l3")
 
