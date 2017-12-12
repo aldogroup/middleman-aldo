@@ -94,10 +94,35 @@ module Middleman
             Dir.foreach('locales') do |proxy_lang|
               next if proxy_lang == '.' or proxy_lang == '..'
               localeID = "#{proxy_lang}".split('.')[0]
+              newLocaleID = "#{proxy_lang}".split('.')[0]
 
-              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/#{localeID}/l3", tab: "l3")
+              require 'pry'
+              binding.pry
+
+              # l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/#{localeID}/l3", tab: "l3")
+
+              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_ca-en", tab: "l3")
 
               l3_data.each do |i|
+                # begin
+                #   unless i['page'].empty? || i['hybris ID'].to_i.to_s.empty?
+                #     image = i['image']
+                #     copy = i['copy']
+                #     title = i['page']
+                #     raw_type = i['type']
+                #     type = sanitize_clean(raw_type)
+                #     raw_category = i['category']
+                #     hybris_id = i['hybris ID']
+                #     disclaimer = i['disclaimer']
+                #     category = sanitize_clean(raw_category)
+                #     filename = category + '-' + sanitize_clean(title)
+                #     filepath = "#{localeID}/l3/#{hybris_id}-#{category}.html"
+                #     proxy filepath, "/localizable/l3/template_l3.html", :locals => { :l3_title => title, :l3_category => category, :l3_type => type, :l3_image => image, :l3_copy => copy, :l3_disclaimer => disclaimer, :lang => localeID }
+                #   end
+                # rescue
+                #   require 'pry'
+                #   binding.pry
+                # end
                 begin
                   unless i['page'].empty? || i['hybris ID'].to_i.to_s.empty?
                     image = i['image']
