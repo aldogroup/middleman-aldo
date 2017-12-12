@@ -94,12 +94,17 @@ module Middleman
             Dir.foreach('locales') do |proxy_lang|
               next if proxy_lang == '.' or proxy_lang == '..'
               localeID = "#{proxy_lang}".split('.')[0]
-              newLocaleID = "#{proxy_lang}".split('.')[0]
-              modLocaleID = newLocaleID.gsub('_', '-')
+
+              if (localeID == 'us_en_US') {
+                newLocaleID = localeID.gsub('us_en_US', 'en-US')
+              } else {
+                newLocaleID = localeID.gsub('_', '-')
+              }
+              
 
               # l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/#{localeID}/l3", tab: "l3")
 
-              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_#{modLocaleID}", tab: "L3_#{modLocaleID}")
+              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_#{modLocaleID}", tab: "l3")
 
               # require 'pry'
               # binding.pry
