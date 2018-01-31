@@ -278,8 +278,11 @@ module Middleman
         cache_seconds = period_to_seconds(cache_period)
         return nil unless cache_seconds
         return nil unless cache_seconds > 0
-
+        # if tab.includes? 'L3'
+        #   cache = YAML.load(::File.read("data/cache/#{locale}_l3.yml")) rescue nil
+        # else
         cache = YAML.load(::File.read("data/cache/#{locale}_#{tab}.yml")) rescue nil
+        # end
         return nil unless cache
         return nil if Time.at(cache['ts'].to_i) + period_to_seconds(cache_period) < Time.now
 
