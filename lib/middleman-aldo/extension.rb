@@ -95,59 +95,59 @@ module Middleman
               next if proxy_lang == '.' or proxy_lang == '..'
               localeID = "#{proxy_lang}".split('.')[0]
 
-              if localeID == 'us_en_US'
-                newLocaleID = localeID.gsub('us_en_US', 'us-en')
-              else
-                newLocaleID = localeID.gsub('_', '-')
-              end
+              # if localeID == 'us_en_US'
+              #   newLocaleID = localeID.gsub('us_en_US', 'us-en')
+              # else
+              #   newLocaleID = localeID.gsub('_', '-')
+              # end
 
 
-              # l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/#{localeID}/l3", tab: "l3")
+              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/#{localeID}/l3", tab: "l3")
 
-              l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_#{newLocaleID}", tab: "L3_#{newLocaleID}")
+              # l3_data = get_data(localeID, path: "#{banner}/#{config[:l3_datafile]}/CIS_Categories/L3_#{newLocaleID}", tab: "L3_#{newLocaleID}")
 
               l3_data.each do |i|
-                # begin
-                #   unless i['page'].empty? || i['hybris ID'].to_i.to_s.empty?
-                #     image = i['image']
-                #     copy = i['copy']
-                #     title = i['page']
-                #     raw_type = i['type']
-                #     type = sanitize_clean(raw_type)
-                #     raw_category = i['category']
-                #     hybris_id = i['hybris ID']
-                #     disclaimer = i['disclaimer']
-                #     category = sanitize_clean(raw_category)
-                #     filename = category + '-' + sanitize_clean(title)
-                #     filepath = "#{localeID}/l3/#{hybris_id}-#{category}.html"
-                #     proxy filepath, "/localizable/l3/template_l3.html", :locals => { :l3_title => title, :l3_category => category, :l3_type => type, :l3_image => image, :l3_copy => copy, :l3_disclaimer => disclaimer, :lang => localeID }
-                #   end
-                # rescue
-                #   require 'pry'
-                #   binding.pry
-                # end
                 begin
-                  unless i['TITLE'].empty? || i['CATEGORY ID'].to_i.to_s.empty?
-                    image = i['MEDIA']
-                    copy = i['COPY']
-                    info = i['INFO']
-                    code = i['CODE']
-                    title = i['TITLE']
-                    raw_type = i['TYPE']
+                  unless i['page'].empty? || i['hybris ID'].to_i.to_s.empty?
+                    image = i['image']
+                    copy = i['copy']
+                    title = i['page']
+                    raw_type = i['type']
                     type = sanitize_clean(raw_type)
-                    raw_category = i['DEPARTMENT']
-                    hybris_id = i['CATEGORY ID']
-                    disclaimer = i['DISCLAIMER']
-                    status = i['STATUS']
+                    raw_category = i['category']
+                    hybris_id = i['hybris ID']
+                    disclaimer = i['disclaimer']
                     category = sanitize_clean(raw_category)
                     filename = category + '-' + sanitize_clean(title)
                     filepath = "#{localeID}/l3/#{hybris_id}-#{category}.html"
-                    proxy filepath, "/localizable/l3/template_l3.html", :locals => { :l3_title => title, :l3_info => info, :l3_code => code, :l3_category => category, :l3_type => type, :l3_status => status, :l3_image => image, :l3_copy => copy, :l3_disclaimer => disclaimer, :lang => localeID }
+                    proxy filepath, "/localizable/l3/template_l3.html", :locals => { :l3_title => title, :l3_category => category, :l3_type => type, :l3_image => image, :l3_copy => copy, :l3_disclaimer => disclaimer, :lang => localeID }
                   end
                 rescue
                   require 'pry'
                   binding.pry
                 end
+                # begin
+                #   unless i['TITLE'].empty? || i['CATEGORY ID'].to_i.to_s.empty?
+                #     image = i['MEDIA']
+                #     copy = i['COPY']
+                #     info = i['INFO']
+                #     code = i['CODE']
+                #     title = i['TITLE']
+                #     raw_type = i['TYPE']
+                #     type = sanitize_clean(raw_type)
+                #     raw_category = i['DEPARTMENT']
+                #     hybris_id = i['CATEGORY ID']
+                #     disclaimer = i['DISCLAIMER']
+                #     status = i['STATUS']
+                #     category = sanitize_clean(raw_category)
+                #     filename = category + '-' + sanitize_clean(title)
+                #     filepath = "#{localeID}/l3/#{hybris_id}-#{category}.html"
+                #     proxy filepath, "/localizable/l3/template_l3.html", :locals => { :l3_title => title, :l3_info => info, :l3_code => code, :l3_category => category, :l3_type => type, :l3_status => status, :l3_image => image, :l3_copy => copy, :l3_disclaimer => disclaimer, :lang => localeID }
+                #   end
+                # rescue
+                #   require 'pry'
+                #   binding.pry
+                # end
               end
             end
           end
