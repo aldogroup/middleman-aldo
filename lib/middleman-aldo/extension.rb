@@ -110,6 +110,7 @@ module Middleman
                 begin
                   unless i['page'].empty? || i['hybris ID'].to_i.to_s.empty?
                     image = i['image']
+                    mobile = i['mobile']
                     copy = i['copy']
                     title = i['page']
                     raw_type = i['type']
@@ -120,7 +121,7 @@ module Middleman
                     category = sanitize_clean(raw_category)
                     filename = category + '-' + sanitize_clean(title)
                     filepath = "#{localeID}/l3/#{hybris_id}-#{category}.html"
-                    proxy filepath, "/localizable/l3/template_l3.html", :locals => { :l3_title => title, :l3_category => category, :l3_type => type, :l3_image => image, :l3_copy => copy, :l3_disclaimer => disclaimer, :lang => localeID }
+                    proxy filepath, "/localizable/l3/template_l3.html", :locals => { :l3_title => title, :l3_category => category, :l3_type => type, :l3_image => image, :l3_mobile => mobile, :l3_copy => copy, :l3_disclaimer => disclaimer, :lang => localeID }
                   end
                 rescue
                   require 'pry'
