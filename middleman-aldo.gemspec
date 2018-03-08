@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'curb',               '~> 0.9'
   spec.add_dependency 'rack_staging',       '~> 0.2'
   spec.add_dependency 'rack-contrib',       '~> 1.2'
-  spec.add_dependency 'rack-protection',    '~> 1.5'
+  spec.add_dependency 'rack-protection',    '~> 2.0'
   spec.add_dependency 'rack-rewrite',       '~> 1.5'
   spec.add_dependency 'thin',               '~> 1.6'
   spec.add_dependency 'rack-ssl-enforcer',  '~> 0.2'
